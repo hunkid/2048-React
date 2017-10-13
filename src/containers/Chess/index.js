@@ -6,6 +6,9 @@ import Board from '../../components/Board'
 import { connect } from 'react-redux'
 import {changePiecePos, addPiece, delPiece} from '../../actions'
 
+import {change2NewChess} from '../../util/chessUtil'
+import {LEFT, RIGHT, TOP, DOWN} from '../../constants/Control'
+
 var mmm,nnn
 class Chess extends Component {
   static defaultProps = {
@@ -36,12 +39,12 @@ class Chess extends Component {
    *     - @param {Number} num
    */
   _generateRandPiece () {
-    let x = Math.floor(Math.random() * 4)
-    let y = Math.floor(Math.random() * 4)
+    let x = Math.floor(Math.random() * this.props.pieceNumPerCol)
+    let y = Math.floor(Math.random() * this.props.pieceNumPerCol)
     // TODO 注意游戏结束
     while (this.props.pieceMap[x] && this.props.pieceMap[x][y] && this.props.pieceMap[x][y] !== 0) {
-      x = Math.floor(Math.random() * 4)
-      y = Math.floor(Math.random() * 4)
+      x = Math.floor(Math.random() * this.props.pieceNumPerCol)
+      y = Math.floor(Math.random() * this.props.pieceNumPerCol)
     }
     let num = Math.random() >= 0.5 ? 4 : 2
     let timeStap = Date.now()
@@ -62,9 +65,14 @@ class Chess extends Component {
     console.log(this.props.pieceMap)
   }
   _handleKeyDown () {
-    if(this.props.changePiecePos) {
-      this.props.changePiecePos(nnn, mmm, [0, 0])
-    }
+    // if(this.props.changePiecePos) {
+    //   this.props.changePiecePos(nnn, mmm, [0, 0])
+    // }
+    let chess = [...this.props.pieceMap]
+    console.log(chess)
+    let nnan = change2NewChess(chess, LEFT, this.props.pieceNumPerCol)
+    
+    console.log(nnan)
   }
   render () {
     return (

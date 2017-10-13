@@ -20,8 +20,8 @@ class Piece  extends Component {
   }
   render () {
     let {styleClassName, number, pieceSize} = this.props
-    let left = this.props.pos[0] * (cellMargin + pieceSize) + cellMargin + 'px'
-    let top = this.props.pos[1] * (cellMargin + pieceSize) + cellMargin + 'px'
+    let top = this.props.pos[0] * (cellMargin + pieceSize) + cellMargin + 'px'
+    let left = this.props.pos[1] * (cellMargin + pieceSize) + cellMargin + 'px'
     let style = {left, top}
     return <div className={`piece ${styleClassName}-${number}`}
             style={style}

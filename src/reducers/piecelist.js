@@ -10,6 +10,7 @@ import * as types from '../constants/ActionTypes'
  * }
  * 
  */
+// tips:删除根据id删
 export default (state = {}, action) => {
   switch (action.type) {
     case types.ADD_PIECE:
