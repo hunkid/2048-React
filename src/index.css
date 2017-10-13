@@ -1,0 +1,107 @@
+.board-wp {
+  position: relative;
+  margin: 0 auto;
+}
+
+.piece-board {
+  background-color: #bbada0;
+  border-radius: 4px;
+  padding-bottom: 10px;
+}
+
+.cell {
+  width: 100px;
+  height: 100px;
+  background-color: #cdc1b4;
+  margin: 10px 0 0 10px;
+  float: left;
+}
+
+.clearfix {
+  zoom: 1;
+}
+
+.clearfix:after {
+  content: '.';
+  clear: both;
+  display: block;
+  visibility: hidden;
+  height: 0;
+}
+
+.piece {
+  text-align: center;
+  width: 100px;
+  line-height: 100px;
+  background-color: #ea7821;
+  position: absolute;
+  left: 10px;
+  top: 10px;
+  transition: all ease .3s;
+}
+.sty-2 {
+  color: #776e65;
+  background-color: #eee4da;
+  font-size: 24px;
+}
+.sty-4 {
+  color: #776e65;
+  background-color: #dcd0b9;
+  font-size: 24px;
+}
+.sty-8 {
+  color: #e6dfdb;
+  background-color: #f3b276;
+  font-size: 24px;
+}
+.sty-16 {
+  color: #f9f6f2;
+  background-color: #f59563;
+  font-size: 24px;
+}
+.sty-32 {
+  color: #e6dfdb;
+  background-color: #f77d5a;
+  font-size: 24px;
+}
+.sty-64 {
+  color: #e6dfdb;
+  background-color: #f65e38;
+  font-size: 24px;
+}
+.sty-128 {
+  color: #f9f6f2;
+  background-color: #eee863;
+  font-size: 24px;
+}
+.sty-258 {
+  color: #f9f6f2;
+  background-color: #edb04d;
+  font-size: 24px;
+}
+.sty-512 {
+  color: #f9f6f2;
+  background-color: #ecb04d;
+  font-size: 24px;
+}
+.sty-1024 {
+  color: #776e65;
+  background-color: #eb9437;
+  font-size: 24px;
+}
+.sty-2048 {
+  color: #e6dfdb;
+  background-color: #dcb71b;
+  font-size: 24px;
+}
+.sty-4096 {
+  color: #e6dfdb;
+  background-color: #dcb71b;
+  font-size: 24px;
+}
+.sty-8192 {
+  color: #e6dfdb;
+  background-color: #dcb71b;
+  font-size: 24px;
+}
+
