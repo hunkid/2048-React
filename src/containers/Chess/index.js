@@ -6,10 +6,22 @@ import Board from '../../components/Board'
 import { connect } from 'react-redux'
 import {changePiecePos, addPiece, delPiece} from '../../actions'
 
-import {change2NewChess} from '../../util/chessUtil'
-import {LEFT, RIGHT, TOP, DOWN} from '../../constants/Control'
+import {change2NewChess, applyPatches} from '../../util/chessUtil'
+import {
+  LEFT,
+  RIGHT,
+  UP,
+  DOWN,
+  // DELETE,
+  // ADD,
+  // MOVE,
+  LEFTKeyCode,
+  RIGHTKeyCode,
+  UPKeyCode,
+  DOWNKeyCode
+} from '../../constants/Control'
 
-var mmm,nnn
+// import {store} from '../../index' // for test
 class Chess extends Component {
   static defaultProps = {
     pieceNumPerCol: 4,
@@ -19,17 +31,17 @@ class Chess extends Component {
     super(props)
     this._generateRandPiece = this._generateRandPiece.bind(this)
     this._handleKeyDown = this._handleKeyDown.bind(this)
+    this._handleClick = this._handleClick.bind(this)
     this.state = {
       pieces: [],
       posPieces: {}
     }
   }
   componentDidMount () {
-    window.addEventListener('keydown', this._handleKeyDown)
+    window.addEventListener('keydown', this._handleKeyDown, false)
   }
   // 更新状态时，需进行：生成新棋子、删除旧棋子，也就是遍历状态
   componentDidUpdate () {
-
   }
   /**
    * 在随机位置上生成随机棋子
@@ -48,8 +60,6 @@ class Chess extends Component {
     }
     let num = Math.random() >= 0.5 ? 4 : 2
     let timeStap = Date.now()
-    mmm = [x, y] // TODO
-    nnn = timeStap
     return {
       pos: [x, y],
       id: timeStap,
@@ -57,22 +67,31 @@ class Chess extends Component {
     }
   }
   _handleClick () {
-    // console.log(this.props.pieceMap)
     let {pos, id, num} = this._generateRandPiece()
-    if(this.props.addPiece) {
-      this.props.addPiece(id, pos, num) // TODO， 随机生成2或者4
-    }
-    console.log(this.props.pieceMap)
+    this.props.addPiece(id, pos, num)
   }
-  _handleKeyDown () {
-    // if(this.props.changePiecePos) {
-    //   this.props.changePiecePos(nnn, mmm, [0, 0])
-    // }
-    let chess = [...this.props.pieceMap]
-    console.log(chess)
-    let nnan = change2NewChess(chess, LEFT, this.props.pieceNumPerCol)
-    
-    console.log(nnan)
+  _handleKeyDown (e) {
+    let chess = JSON.parse(JSON.stringify(this.props.pieceMap))
+    let patches
+    switch (e.keyCode) {
+      case LEFTKeyCode:
+        patches = change2NewChess(chess, LEFT, this.props.pieceNumPerCol) // tofix，这地方经过经过以后，state变化了，为什么，发现...是浅fuzhi，从state一路浅复制到这
+        break
+      case RIGHTKeyCode:
+        patches = change2NewChess(chess, RIGHT, this.props.pieceNumPerCol)
+        break
+      case UPKeyCode:
+        patches = change2NewChess(chess, UP, this.props.pieceNumPerCol)
+        break
+      case DOWNKeyCode:
+        patches = change2NewChess(chess, DOWN, this.props.pieceNumPerCol)
+        break
+      default:
+        break
+    }
+    applyPatches(patches)
+    patches = null
+    return false
   }
   render () {
     return (
@@ -80,7 +99,7 @@ class Chess extends Component {
         <Board>
           {/* {this.state.pieces.map((piece, i) => piece)} */}
           {Object.keys(this.props.posPieces).map((key, i) => {
-            return <Piece pos={this.props.posPieces[key].curPos} key={key} number={this.props.posPieces[key].num}/> //TODO: 尚未考虑产生数字
+            return <Piece pos={this.props.posPieces[key].curPos} key={key} number={this.props.posPieces[key].num}/>
           })}
         </Board>
       </div>
@@ -107,8 +126,8 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     // 增加棋子
-    addPiece: (id, pos, piece) => {
-      dispatch(addPiece(id, pos, piece))
+    addPiece: (id, pos, num) => {
+      dispatch(addPiece(id, pos, num))
     },
     // 变换棋子位置
     changePiecePos: (id, oldPos, newPos) => {
