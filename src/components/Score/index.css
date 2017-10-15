@@ -1,0 +1,23 @@
+.score-panel {
+  width: 80px;
+  border-radius: 5px;
+  background-color: #baada0;
+  text-align: center;
+}
+
+.score-bd {
+  color: #eee4da;
+  text-align: 60px;
+  font-size: 18px;
+  font-weight: 700;
+  height: 30px;
+  line-height: 30px;
+}
+
+.score-ft {
+  color: #fff;
+  font-weight: 700;
+  font-size: 20px;
+  margin-top: -5px;
+  padding-bottom: 5px;
+}

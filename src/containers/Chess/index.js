@@ -31,13 +31,14 @@ class Chess extends Component {
     super(props)
     this._generateRandPiece = this._generateRandPiece.bind(this)
     this._handleKeyDown = this._handleKeyDown.bind(this)
-    this._handleClick = this._handleClick.bind(this)
+    // this._handleClick = this._handleClick.bind(this)
+    this._isGameOver = this._isGameOver.bind(this)
     this.state = {
-      pieces: [],
-      posPieces: {}
+      gameOver: false
     }
   }
   componentDidMount () {
+    this._generateRandPiece()
     window.addEventListener('keydown', this._handleKeyDown, false)
   }
   // 更新状态时，需进行：生成新棋子、删除旧棋子，也就是遍历状态
@@ -51,6 +52,9 @@ class Chess extends Component {
    *     - @param {Number} num
    */
   _generateRandPiece () {
+    if (this.state.gameOver) {
+      return void 1
+    }
     let x = Math.floor(Math.random() * this.props.pieceNumPerCol)
     let y = Math.floor(Math.random() * this.props.pieceNumPerCol)
     // TODO 注意游戏结束
@@ -60,17 +64,22 @@ class Chess extends Component {
     }
     let num = Math.random() >= 0.5 ? 4 : 2
     let timeStap = Date.now()
-    return {
-      pos: [x, y],
-      id: timeStap,
-      num
-    }
+    this.props.addPiece(timeStap, [x, y], num)
   }
-  _handleClick () {
-    let {pos, id, num} = this._generateRandPiece()
-    this.props.addPiece(id, pos, num)
-  }
+  // _handleClick () {
+  //   if (this.state.gameOver) {
+  //     return void 1
+  //   }
+  //   let isOver = this._isGameOver()
+  //   if (isOver) {
+  //     return
+  //   }
+  //   this._generateRandPiece()
+  // }
   _handleKeyDown (e) {
+    if (this.state.gameOver) {
+      return void 1
+    }
     let chess = JSON.parse(JSON.stringify(this.props.pieceMap))
     let patches
     switch (e.keyCode) {
@@ -89,13 +98,46 @@ class Chess extends Component {
       default:
         break
     }
-    applyPatches(patches)
-    patches = null
+    if (patches && patches.moves && patches.moves.length) { // 说明有移动
+      applyPatches(patches)
+      patches = null
+      this._generateRandPiece()
+      if (this._isGameOver()) {
+        this.state.gameOver = true
+        this.setState({
+          gameOver: true
+        })
+      }
+    }
     return false
+  }
+  _isGameOver () {
+    let chess = JSON.parse(JSON.stringify(this.props.pieceMap))
+    let flag = true, n = this.props.pieceNumPerCol
+    l1: for (let k = 0; k < n; k++) {
+      chess[k] = chess[k] || []
+      chess[k + 1] = chess[k + 1] || []
+      for (let i = 0; i < n - 1; i++) {
+        if (!chess[k][i] || chess[k][i] === 0 || !chess[k][i + 1] || chess[k][i + 1] === 0 || chess[k][i]['num'] === chess[k][i + 1]['num']) {
+          flag = false
+          break l1
+        // } else if (!chess[k][i] || chess[k][i] === 0 || (!chess[k + 1][i] && k < n - 1) || chess[k + 1][i] === 0 || chess[k][i]['num'] === chess[k + 1][i]['num']) {
+        } else if (!chess[k][i] || chess[k][i] === 0 || (chess[k + 1] && chess[k + 1][i] && chess[k][i]['num'] === chess[k + 1][i]['num'])) {
+          flag = false
+          break l1
+        }
+      }
+    }
+    if (flag) {
+      setTimeout(function() {
+        alert('Game Over!')
+      }, 500)
+    }
+    return flag
   }
   render () {
     return (
-      <div onClick={this._handleClick.bind(this)}>
+      <div>
         <Board>
           {/* {this.state.pieces.map((piece, i) => piece)} */}
           {Object.keys(this.props.posPieces).map((key, i) => {
@@ -103,12 +145,11 @@ class Chess extends Component {
           })}
         </Board>
       </div>
-      
     )
   }
 }
 Chess.propTypes = {
-  pieceNumPerCol: PropTypes.number, // TO DELETE
+  pieceNumPerCol: PropTypes.number,
   posPieces: PropTypes.object,
   pieceMap: PropTypes.array,
   addPiece: PropTypes.func,

@@ -222,7 +222,7 @@ function handleDOWN(chess, patches, n) {
     chess[j] = chess[j] || []
     while (j >= 0) {
       let oldPos, newPos
-      while (j >= 0 && (chess[j][k] === 0 || chess[j][k] === undefined || chess[j][k] === null)) {
+      while (j >= 0 && (chess[j] === null || chess[j][k] === 0 || chess[j][k] === undefined || chess[j][k] === null)) {
         j--
         chess[j] = chess[j] || []
       }

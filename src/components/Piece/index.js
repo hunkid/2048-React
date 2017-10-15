@@ -13,10 +13,8 @@ class Piece  extends Component {
     super(props)
   }
   componentWillMount () {
-    console.log('生成')
   }
   componentWillUnmount () {
-    console.log('毁灭')
   }
   render () {
     let {styleClassName, number, pieceSize} = this.props

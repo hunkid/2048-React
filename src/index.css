@@ -37,6 +37,7 @@
   position: absolute;
   left: 10px;
   top: 10px;
+  font-weight: 700;
   transition: all ease .3s;
 }
 .sty-2 {
@@ -74,7 +75,7 @@
   background-color: #eee863;
   font-size: 24px;
 }
-.sty-258 {
+.sty-256 {
   color: #f9f6f2;
   background-color: #edb04d;
   font-size: 24px;
@@ -105,3 +106,12 @@
   font-size: 24px;
 }
 
+.score-ot {
+  width: 500px;
+  margin: 20px auto;
+  text-align: right;
+}
+
+.f-r {
+  float: right;
+}
