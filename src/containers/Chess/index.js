@@ -20,7 +20,6 @@ import {
 
 const uuidv1 = require('uuid/v1')
 
-// import {store} from '../../index' // for test
 class Chess extends Component {
   static defaultProps = {
     pieceNumPerCol: 4,
@@ -112,7 +111,6 @@ class Chess extends Component {
       }
     }
     if (flag) {
-      console.log(chess)
       this._handleGameOver()
     }
     return flag

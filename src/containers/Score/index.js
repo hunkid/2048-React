@@ -10,7 +10,7 @@ class ScoreContainer extends Component {
     }
   }
   render () {
-    return <Score score={this.props.scoreState.score} />
+    return <Score score={this.props.scoreState.score}/>
   }
 }
 

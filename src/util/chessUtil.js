@@ -3,7 +3,7 @@
 
 import {LEFT, RIGHT, UP, DOWN, DELETE, ADD, MOVE} from '../constants/Control'
 import {changePiecePos, addPiece, delPiece} from '../actions'
-import {store} from '../index' // TODO 后期可能会将store独立出去
+import {store} from '../store' // TODO 后期可能会将store独立出去
 const uuidv1 = require('uuid/v1')
 /**
  * 

@@ -9,7 +9,7 @@ class Piece  extends Component {
     number: 2,
     styleClassName: 'sty',
     pos: [0, 0],
-    isAnimationNeed: true
+    isAnimationNeed: false
   }
   constructor (props) {
     super(props)
