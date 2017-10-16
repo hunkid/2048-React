@@ -9,12 +9,13 @@ export const changePiecePos = (id, oldPos, newPos) => {
   }
 }
 
-export const addPiece = (id, pos, num) => {
+export const addPiece = (id, pos, num, isAnimationNeed) => {
   return {
     type: types.ADD_PIECE,
     pos,
     id,
-    num
+    num,
+    isAnimationNeed
   }
 }
 

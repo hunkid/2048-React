@@ -19,7 +19,8 @@ export default (state = {}, action) => {
         [action.id]: {
           curPos: action.pos,
           prevPos: null,
-          num: action.num
+          num: action.num,
+          isAnimationNeed: action.isAnimationNeed
         }
       }
     case types.CHANGE_PIECE_POS:

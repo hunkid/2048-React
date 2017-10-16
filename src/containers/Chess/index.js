@@ -12,14 +12,12 @@ import {
   RIGHT,
   UP,
   DOWN,
-  // DELETE,
-  // ADD,
-  // MOVE,
   LEFTKeyCode,
   RIGHTKeyCode,
   UPKeyCode,
   DOWNKeyCode
 } from '../../constants/Control'
+
 const uuidv1 = require('uuid/v1')
 
 // import {store} from '../../index' // for test
@@ -32,8 +30,8 @@ class Chess extends Component {
     super(props)
     this._generateRandPiece = this._generateRandPiece.bind(this)
     this._handleKeyDown = this._handleKeyDown.bind(this)
-    // this._handleClick = this._handleClick.bind(this)
     this._isGameOver = this._isGameOver.bind(this)
+    this._handleGameOver = this._handleGameOver.bind(this)
     this.state = {
       gameOver: false
     }
@@ -42,42 +40,23 @@ class Chess extends Component {
     this._generateRandPiece()
     window.addEventListener('keydown', this._handleKeyDown, false)
   }
-  // 更新状态时，需进行：生成新棋子、删除旧棋子，也就是遍历状态
   componentDidUpdate () {
   }
-  /**
-   * 在随机位置上生成随机棋子
-   * @return {Object} 返回坐标、id、值
-   *     - @param {Array<Number>} pos
-   *     - @param {String} id
-   *     - @param {Number} num
-   */
+
   _generateRandPiece () {
     if (this.state.gameOver) {
       return void 1
     }
     let x = Math.floor(Math.random() * this.props.pieceNumPerCol)
     let y = Math.floor(Math.random() * this.props.pieceNumPerCol)
-    // TODO 注意游戏结束
     while (this.props.pieceMap[x] && this.props.pieceMap[x][y] && this.props.pieceMap[x][y] !== 0) {
       x = Math.floor(Math.random() * this.props.pieceNumPerCol)
       y = Math.floor(Math.random() * this.props.pieceNumPerCol)
     }
     let num = Math.random() >= 0.5 ? 4 : 2
-    // let timeStap = Date.now()
     let id = uuidv1() // 基于时间戳的uuid
-    this.props.addPiece(id, [x, y], num)
+    this.props.addPiece(id, [x, y], num, true)
   }
-  // _handleClick () {
-  //   if (this.state.gameOver) {
-  //     return void 1
-  //   }
-  //   let isOver = this._isGameOver()
-  //   if (isOver) {
-  //     return
-  //   }
-  //   this._generateRandPiece()
-  // }
   _handleKeyDown (e) {
     if (this.state.gameOver) {
       return void 1
@@ -123,27 +102,39 @@ class Chess extends Component {
         if (!chess[k][i] || chess[k][i] === 0 || !chess[k][i + 1] || chess[k][i + 1] === 0 || chess[k][i]['num'] === chess[k][i + 1]['num']) {
           flag = false
           break l1
-        // } else if (!chess[k][i] || chess[k][i] === 0 || (!chess[k + 1][i] && k < n - 1) || chess[k + 1][i] === 0 || chess[k][i]['num'] === chess[k + 1][i]['num']) {
-        } else if (!chess[k][i] || chess[k][i] === 0 || (chess[k + 1] && chess[k + 1][i] && chess[k][i]['num'] === chess[k + 1][i]['num'])) {
+        }
+      }
+      for (let i = 0; i < n; i++) {
+        if (!chess[k][i] || chess[k][i] === 0 || (chess[k + 1] && chess[k + 1][i] && chess[k][i]['num'] === chess[k + 1][i]['num'])) {
           flag = false
           break l1
         }
       }
     }
     if (flag) {
+      console.log(chess)
+      this._handleGameOver()
+    }
+    return flag
+  }
+  _handleGameOver () {
+    if (this.props.gameOverFunc) {
+      this.props.gameOverFunc()
+    } else {
       setTimeout(function() {
         alert('Game Over!')
       }, 500)
     }
-    return flag
   }
   render () {
     return (
       <div>
         <Board>
-          {/* {this.state.pieces.map((piece, i) => piece)} */}
           {Object.keys(this.props.posPieces).map((key, i) => {
-            return <Piece pos={this.props.posPieces[key].curPos} key={key} number={this.props.posPieces[key].num}/>
+            return <Piece
+                     pos={this.props.posPieces[key].curPos}
+                     key={key} number={this.props.posPieces[key].num}
+                     isAnimationNeed={this.props.posPieces[key].isAnimationNeed}/>
           })}
         </Board>
       </div>
@@ -157,6 +148,7 @@ Chess.propTypes = {
   addPiece: PropTypes.func,
   changePiecePos: PropTypes.func,
   delPiece: PropTypes.func,
+  gameOverFunc: PropTypes.func
 }
 
 const mapStateToProps = (state) => {
@@ -169,8 +161,8 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     // 增加棋子
-    addPiece: (id, pos, num) => {
-      dispatch(addPiece(id, pos, num))
+    addPiece: (id, pos, num, isAnimationNeed) => {
+      dispatch(addPiece(id, pos, num, isAnimationNeed))
     },
     // 变换棋子位置
     changePiecePos: (id, oldPos, newPos) => {

@@ -5,7 +5,6 @@ import { Provider } from 'react-redux'
 import { createLogger } from 'redux-logger'
 import './index.css'
 import './reset.css'
-// import Chess from './containers/Chess'
 import App from './App'
 import registerServiceWorker from './registerServiceWorker'
 

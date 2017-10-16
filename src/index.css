@@ -115,3 +115,11 @@
 .f-r {
   float: right;
 }
+
+.pieceAn-appear {
+  opacity: .01;
+}
+.pieceAn-appear.pieceAn-appear-active {
+  opacity: 1;
+  transition: opacity .9s linear;
+}

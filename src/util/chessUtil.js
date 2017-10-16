@@ -46,7 +46,7 @@ export function applyPatches(patches) {
         case ADD:
           // let timeStap = Date.now() // Date.now()会产生相同的字符串，不是唯一的id，弃用
           let id = uuidv1() // 基于时间戳的uuid
-          store.dispatch(addPiece(id, patch.pos, patch.num))
+          store.dispatch(addPiece(id, patch.pos, patch.num, false))
           break
         case MOVE:
           store.dispatch(changePiecePos(patch.id, patch.oldPos, patch.newPos))
