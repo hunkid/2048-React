@@ -1,5 +1,4 @@
 import React, {Component} from 'react'
-// import PropTypes from 'prop-types'
 
 import Chess from './containers/Chess'
 import Score from './containers/Score'

@@ -1,12 +1,13 @@
 import React, {Component} from 'react'
 import PropTypes from 'prop-types'
-import {cellSize, cellMargin} from '../../constants/Size'
+import {getSize} from '../../constants/Size'
+// import {cellSize, cellMargin} from '../../constants/Size'
 
 class Board  extends Component {
   static defaultProps = {
     pieceNumPerCol: 4,
-    cellSize,
-    cellMargin
+    cellSize: getSize().cellSize,
+    cellMargin: getSize().cellMargin
   }
   constructor(props) {
     super(props)
@@ -27,12 +28,23 @@ class Board  extends Component {
   _computeBoardSize () {
     let {cellSize, cellMargin, pieceNumPerCol} = this.props
     let width = (cellSize + cellMargin) * pieceNumPerCol + cellMargin
+    
+    // // 新增移动端判断
+    // let clWid = document.body.clientWidth
+    // if (clWid < width) {
+    //   width = clWid
+    // }
     let style = {
-      width: `${width}px`
+      width: `${width}px`,
+      height: `${width}px`
     }
     return style
   }
   render () {
+    let cellStyle = {
+      width: `${this.props.cellSize}px`,
+      height: `${this.props.cellSize}px`,
+      margin: `${this.props.cellMargin}px 0 0 ${this.props.cellMargin}px`}
     var cells = this._generateBoardCell()
     var style = this._computeBoardSize()
     return (
@@ -40,7 +52,7 @@ class Board  extends Component {
         <div className="board-wp" style={style}>
           <ul className="piece-board clearfix">
             {cells.map((cell, i) => 
-              <li key={i} className="cell"></li>
+              <li key={i} className="cell" style={cellStyle}></li>
             )}
           </ul>
           {this.props.children}

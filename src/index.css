@@ -10,11 +10,15 @@
 }
 
 .cell {
-  width: 100px;
-  height: 100px;
   background-color: #cdc1b4;
-  margin: 10px 0 0 10px;
   float: left;
+}
+
+@media screen and (max-width: 450px) {
+  .score-ot {
+    width: 100%;
+    margin: 10px auto;
+  }
 }
 
 .clearfix {
@@ -106,12 +110,16 @@
   font-size: 24px;
 }
 
-.score-ot {
-  width: 500px;
-  margin: 20px auto;
-  text-align: right;
+@media screen and (min-width: 450px) {
+  .score-ot {
+    width: 450px;
+    margin: 20px auto;
+  }
 }
 
+.middle {
+  margin: 0 auto;
+}
 .f-r {
   float: right;
 }

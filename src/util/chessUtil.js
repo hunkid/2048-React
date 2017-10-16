@@ -1,9 +1,7 @@
 
-// import { dispatch } from '../redux/store/store'
-
 import {LEFT, RIGHT, UP, DOWN, DELETE, ADD, MOVE} from '../constants/Control'
 import {changePiecePos, addPiece, delPiece} from '../actions'
-import {store} from '../store' // TODO 后期可能会将store独立出去
+import {store} from '../store'
 const uuidv1 = require('uuid/v1')
 /**
  * 

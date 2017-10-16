@@ -31,12 +31,19 @@ class Chess extends Component {
     this._handleKeyDown = this._handleKeyDown.bind(this)
     this._isGameOver = this._isGameOver.bind(this)
     this._handleGameOver = this._handleGameOver.bind(this)
+    this._handleMobile = this._handleMobile.bind(this)
+    this._getAngle = this._getAngle.bind(this)
+    this._getDirection = this._getDirection.bind(this)
+    this._handleFingerMove = this._handleFingerMove.bind(this)
     this.state = {
       gameOver: false
     }
+    this.startx = null
+    this.starty = null
   }
   componentDidMount () {
     this._generateRandPiece()
+    this._handleMobile()
     window.addEventListener('keydown', this._handleKeyDown, false)
   }
   componentDidUpdate () {
@@ -123,6 +130,86 @@ class Chess extends Component {
         alert('Game Over!')
       }, 500)
     }
+  }
+  _getAngle(angx, angy) {
+    return Math.atan2(angy, angx) * 180 / Math.PI
+  }
+  _getDirection(startx, starty, endx, endy) {
+    var angx = endx - startx;
+    var angy = endy - starty;
+    var result = -1;
+
+    //如果滑动距离太短
+    if (Math.abs(angx) < 2 && Math.abs(angy) < 2) {
+        return result;
+    }
+
+    var angle = this._getAngle(angx, angy)
+    if (angle >= -135 && angle <= -45) {
+        result = UP
+    } else if (angle > 45 && angle < 135) {
+        result = DOWN
+    } else if ((angle >= 135 && angle <= 180) || (angle >= -180 && angle < -135)) {
+        result = LEFT
+    } else if (angle >= -45 && angle <= 45) {
+        result = RIGHT
+    }
+    return result
+  }
+  _handleMobile () {
+    document.addEventListener('touchstart', (e) => {
+      this.startx = e.touches[0].pageX
+      this.starty = e.touches[0].pageY
+      e.preventDefault()
+      return false
+    }, false)
+    document.addEventListener("touchend", (e) => {
+      var endx, endy
+      endx = e.changedTouches[0].pageX
+      endy = e.changedTouches[0].pageY
+      var direction = this._getDirection(this.startx, this.starty, endx, endy)
+      this._handleFingerMove(direction)
+      e.preventDefault()
+      return false
+    }, false)
+    document.body.addEventListener('touchmove', (e) => { // 很关键，阻止浏览器上下滑动
+      e.stopPropagation()
+    })
+  }
+  _handleFingerMove (direction) {
+    if (this.state.gameOver) {
+      return void 1
+    }
+    let chess = JSON.parse(JSON.stringify(this.props.pieceMap))
+    let patches
+    switch (direction) {
+      case LEFT:
+        patches = change2NewChess(chess, LEFT, this.props.pieceNumPerCol) // tofix，这地方经过经过以后，state变化了，为什么，发现...是浅fuzhi，从state一路浅复制到这
+        break
+      case RIGHT:
+        patches = change2NewChess(chess, RIGHT, this.props.pieceNumPerCol)
+        break
+      case UP:
+        patches = change2NewChess(chess, UP, this.props.pieceNumPerCol)
+        break
+      case DOWN:
+        patches = change2NewChess(chess, DOWN, this.props.pieceNumPerCol)
+        break
+      default:
+        break
+    }
+    if (patches && patches.moves && patches.moves.length) { // 说明有移动
+      applyPatches(patches)
+      patches = null
+      this._generateRandPiece()
+      if (this._isGameOver()) {
+        this.state.gameOver = true
+        this.setState({
+          gameOver: true
+        })
+      }
+    }
+    return false
   }
   render () {
     return (

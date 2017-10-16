@@ -1,7 +1,11 @@
 import React, {Component} from 'react'
 import PropTypes from 'prop-types'
-import {cellSize, cellMargin} from '../../constants/Size'
+// import {cellSize, cellMargin} from '../../constants/Size'
+import {getSize} from '../../constants/Size'
 const ReactCssTransitionGroup = require('react-addons-css-transition-group')
+
+let cellSize = getSize().cellSize
+let cellMargin = getSize().cellMargin
 
 class Piece  extends Component {
   static defaultProps = {
@@ -11,9 +15,6 @@ class Piece  extends Component {
     pos: [0, 0],
     isAnimationNeed: false
   }
-  constructor (props) {
-    super(props)
-  }
   componentWillMount () {
   }
   componentWillUnmount () {
@@ -22,7 +23,7 @@ class Piece  extends Component {
     let {styleClassName, number, pieceSize} = this.props
     let top = this.props.pos[0] * (cellMargin + pieceSize) + cellMargin + 'px'
     let left = this.props.pos[1] * (cellMargin + pieceSize) + cellMargin + 'px'
-    let style = {left, top}
+    let style = {left, top, width: `${pieceSize}px`, height: `${pieceSize}px`, lineHeight: `${pieceSize}px`}
     if (this.props.isAnimationNeed){
       return (
         <ReactCssTransitionGroup
