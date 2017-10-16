@@ -135,13 +135,13 @@ class Chess extends Component {
     return Math.atan2(angy, angx) * 180 / Math.PI
   }
   _getDirection(startx, starty, endx, endy) {
-    var angx = endx - startx;
-    var angy = endy - starty;
-    var result = -1;
+    var angx = endx - startx
+    var angy = endy - starty
+    var result = -1
 
     //如果滑动距离太短
     if (Math.abs(angx) < 2 && Math.abs(angy) < 2) {
-        return result;
+        return result
     }
 
     var angle = this._getAngle(angx, angy)
