@@ -4,6 +4,7 @@
 import {LEFT, RIGHT, UP, DOWN, DELETE, ADD, MOVE} from '../constants/Control'
 import {changePiecePos, addPiece, delPiece} from '../actions'
 import {store} from '../index' // TODO 后期可能会将store独立出去
+const uuidv1 = require('uuid/v1')
 /**
  * 
  * @param {Array<Array<Object | undefined | 0> >} chess 如[[0,0,0,{id: '', num: 2}],[{id: '', num: 2},0,0,0],[0,{id: '', num: 2},0,0],[{id: '', num: 2},{id: '', num: 2},0,0]] 
@@ -43,8 +44,9 @@ export function applyPatches(patches) {
           store.dispatch(delPiece(patch.id, patch.pos))
           break
         case ADD:
-          let timeStap = Date.now()
-          store.dispatch(addPiece(timeStap, patch.pos, patch.num))
+          // let timeStap = Date.now() // Date.now()会产生相同的字符串，不是唯一的id，弃用
+          let id = uuidv1() // 基于时间戳的uuid
+          store.dispatch(addPiece(id, patch.pos, patch.num))
           break
         case MOVE:
           store.dispatch(changePiecePos(patch.id, patch.oldPos, patch.newPos))

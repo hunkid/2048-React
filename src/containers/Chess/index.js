@@ -20,6 +20,7 @@ import {
   UPKeyCode,
   DOWNKeyCode
 } from '../../constants/Control'
+const uuidv1 = require('uuid/v1')
 
 // import {store} from '../../index' // for test
 class Chess extends Component {
@@ -63,8 +64,9 @@ class Chess extends Component {
       y = Math.floor(Math.random() * this.props.pieceNumPerCol)
     }
     let num = Math.random() >= 0.5 ? 4 : 2
-    let timeStap = Date.now()
-    this.props.addPiece(timeStap, [x, y], num)
+    // let timeStap = Date.now()
+    let id = uuidv1() // 基于时间戳的uuid
+    this.props.addPiece(id, [x, y], num)
   }
   // _handleClick () {
   //   if (this.state.gameOver) {
